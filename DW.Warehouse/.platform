@@ -1,11 +1,11 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
   "metadata": {
-    "type": "DataPipeline",
-    "displayName": "pipeline2_renamed"
+    "type": "Warehouse",
+    "displayName": "DW"
   },
   "config": {
     "version": "2.0",
-    "logicalId": "ccc79bb0-b40f-a348-4a4c-79b11b939a17"
+    "logicalId": "5e71c1dd-39ea-bfa0-4042-735572760d56"
   }
 }

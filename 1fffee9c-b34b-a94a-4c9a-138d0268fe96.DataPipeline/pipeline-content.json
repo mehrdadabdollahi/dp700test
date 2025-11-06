@@ -1,0 +1,52 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "RefreshDataflow",
+        "typeProperties": {
+          "dataflowId": "40be449d-08e5-8efe-406a-93d9eb15a789",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "notifyOption": "NoNotification",
+          "dataflowType": "DataflowFabric",
+          "parameters": {
+            "WSID": {
+              "value": {
+                "value": "@pipeline().libraryVariables.Variables_1_WSID",
+                "type": "Expression"
+              },
+              "type": "String"
+            },
+            "SQLID": {
+              "value": {
+                "value": "@pipeline().libraryVariables.Variables_1_SQLID",
+                "type": "Expression"
+              },
+              "type": "String"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Dataflow1",
+        "dependsOn": []
+      }
+    ],
+    "libraryVariables": {
+      "Variables_1_WSID": {
+        "type": "String",
+        "variableName": "WSID",
+        "libraryName": "Variables_1"
+      },
+      "Variables_1_SQLID": {
+        "type": "String",
+        "variableName": "SQLID",
+        "libraryName": "Variables_1"
+      }
+    }
+  }
+}

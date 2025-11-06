@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/variableLibrary/definition/variables/1.0.0/schema.json",
+  "variables": [
+    {
+      "name": "WSID",
+      "note": "",
+      "type": "String",
+      "value": "82e94661-8a8a-4c22-b855-99b0e068e315"
+    },
+    {
+      "name": "SQLID",
+      "note": "",
+      "type": "String",
+      "value": "\"2d618ebe-b87e-49a2-bf91-478f511a7cbe\""
+    }
+  ]
+}

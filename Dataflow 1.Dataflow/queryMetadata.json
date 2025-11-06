@@ -1,0 +1,42 @@
+{
+  "formatVersion": "202502",
+  "computeEngineSettings": {},
+  "name": "Dataflow 1",
+  "queryGroups": [],
+  "documentLocale": "en-GB",
+  "queriesMetadata": {
+    "Customers": {
+      "queryId": "aa3cfac3-c956-45a3-9c8d-060f5223e88f",
+      "queryName": "Customers"
+    },
+    "WSID": {
+      "queryId": "97b4047f-d7d2-49bd-94f0-4de422ba349b",
+      "queryName": "WSID",
+      "loadEnabled": false
+    },
+    "SQLID": {
+      "queryId": "4e3484fb-a305-46cb-b2db-04dc5474e983",
+      "queryName": "SQLID",
+      "loadEnabled": false
+    },
+    "Customers_DataDestination": {
+      "queryId": "1e0ba930-ac4b-4f27-8599-10ea2a0f7435",
+      "queryName": "Customers_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    }
+  },
+  "connections": [
+    {
+      "path": "FabricSql",
+      "kind": "FabricSql",
+      "connectionId": "{\"ClusterId\":\"c872ee6e-2526-476a-a999-9ffcf0c8c79c\",\"DatasourceId\":\"8739e679-603d-4b45-8aaf-694cc1ae0f57\"}"
+    },
+    {
+      "path": "Warehouse",
+      "kind": "Warehouse",
+      "connectionId": "{\"ClusterId\":\"c872ee6e-2526-476a-a999-9ffcf0c8c79c\",\"DatasourceId\":\"2e1e35ce-fc88-4b05-bb11-d1628291a813\"}"
+    }
+  ],
+  "parametric": true
+}
