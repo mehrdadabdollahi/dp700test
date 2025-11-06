@@ -1,0 +1,115 @@
+-- =====================================
+-- 1. Drop existing tables (optional)
+-- =====================================
+IF OBJECT_ID('dbo.Sales', 'U') IS NOT NULL DROP TABLE dbo.Sales;
+IF OBJECT_ID('dbo.Products', 'U') IS NOT NULL DROP TABLE dbo.Products;
+IF OBJECT_ID('dbo.Customers', 'U') IS NOT NULL DROP TABLE dbo.Customers;
+
+
+-- =====================================
+-- 2. Create Tables
+-- =====================================
+
+CREATE TABLE dbo.Customers (
+    CustomerID INT IDENTITY(1,1) PRIMARY KEY,
+    FirstName NVARCHAR(50),
+    LastName NVARCHAR(50),
+    Email NVARCHAR(100),
+    City NVARCHAR(50),
+    Country NVARCHAR(50),
+    CreatedDate DATETIME2 DEFAULT SYSUTCDATETIME()
+);
+
+CREATE TABLE dbo.Products (
+    ProductID INT IDENTITY(1,1) PRIMARY KEY,
+    ProductName NVARCHAR(100),
+    Category NVARCHAR(50),
+    UnitPrice DECIMAL(10,2),
+    CreatedDate DATETIME2 DEFAULT SYSUTCDATETIME()
+);
+
+CREATE TABLE dbo.Sales (
+    SalesID BIGINT IDENTITY(1,1) PRIMARY KEY,
+    CustomerID INT NOT NULL,
+    ProductID INT NOT NULL,
+    Quantity INT NOT NULL,
+    UnitPrice DECIMAL(10,2) NOT NULL,
+    TotalAmount AS (Quantity * UnitPrice) PERSISTED,
+    SalesDate DATETIME2 NOT NULL,
+    CONSTRAINT FK_Sales_Customer FOREIGN KEY (CustomerID) REFERENCES dbo.Customers(CustomerID),
+    CONSTRAINT FK_Sales_Product FOREIGN KEY (ProductID) REFERENCES dbo.Products(ProductID)
+);
+
+
+-- =====================================
+-- 3. Seed 50 Customers
+-- =====================================
+;WITH numbers AS (
+    SELECT TOP (50) ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS n
+    FROM sys.objects
+)
+INSERT INTO dbo.Customers (FirstName, LastName, Email, City, Country)
+SELECT 
+    CONCAT('Customer', n),
+    CONCAT('Last', n),
+    CONCAT('customer', n, '@example.com'),
+    CHOOSE((n % 5) + 1, 'Vancouver','Seattle','Toronto','Calgary','Portland'),
+    CHOOSE((n % 3) + 1, 'Canada','USA','Mexico')
+FROM numbers;
+
+
+-- =====================================
+-- 4. Seed 30 Products
+-- =====================================
+INSERT INTO dbo.Products (ProductName, Category, UnitPrice)
+VALUES
+('Laptop Pro 15', 'Electronics', 1500),
+('Laptop Air 13', 'Electronics', 1200),
+('4K Monitor', 'Electronics', 400),
+('USB-C Dock', 'Accessories', 130),
+('Wireless Mouse', 'Accessories', 40),
+('Mechanical Keyboard', 'Accessories', 110),
+('Noise Cancelling Headphones', 'Audio', 300),
+('Bluetooth Speaker', 'Audio', 120),
+('Smartphone X', 'Electronics', 999),
+('Tablet Pro', 'Electronics', 850),
+('Webcam HD', 'Accessories', 70),
+('Portable SSD 1TB', 'Storage', 150),
+('Portable SSD 2TB', 'Storage', 250),
+('Cloud Backup Plan', 'Subscription', 10),
+('Software License Pro', 'Subscription', 25),
+('Charging Cable', 'Accessories', 15),
+('Power Adapter', 'Accessories', 45),
+('Ergo Chair', 'Furniture', 300),
+('Desk Lamp', 'Furniture', 90),
+('Office Desk', 'Furniture', 600),
+('VR Headset', 'Electronics', 499),
+('Graphic Tablet', 'Electronics', 299),
+('USB Hub 7-Port', 'Accessories', 55),
+('Tripod Stand', 'Accessories', 35),
+('Microphone Pro', 'Audio', 150),
+('Smartwatch', 'Electronics', 280),
+('Router AX6000', 'Networking', 350),
+('Mesh WiFi Node', 'Networking', 200),
+('Laptop Stand', 'Accessories', 50),
+('Noise Meter', 'Testing', 130);
+
+
+-- =====================================
+-- 5. Generate 5000 Sales Transactions
+-- =====================================
+;WITH nums AS (
+    SELECT TOP (5000)
+        ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS n
+    FROM sys.objects a CROSS JOIN sys.objects b
+)
+INSERT INTO dbo.Sales (CustomerID, ProductID, Quantity, UnitPrice, SalesDate)
+SELECT  
+    ABS(CHECKSUM(NEWID())) % 50 + 1,            -- Customer ID (1–50)
+    ABS(CHECKSUM(NEWID())) % 30 + 1,            -- Product ID (1–30)
+    ABS(CHECKSUM(NEWID())) % 5 + 1,             -- Quantity (1–5)
+    p.UnitPrice,                                -- Correct unit price
+    DATEADD(DAY, -ABS(CHECKSUM(NEWID())) % 365, SYSUTCDATETIME())
+FROM nums
+JOIN dbo.Products p
+    ON (ABS(CHECKSUM(NEWID())) % 30 + 1) = p.ProductID;
